@@ -1,17 +1,36 @@
 package com.narxoz.rpg;
+import com.narxoz.rpg.combatant.*;
+import com.narxoz.rpg.engine.*;
+import com.narxoz.rpg.observer.*;
+import com.narxoz.rpg.strategy.*;
+import java.util.*;
 
-/**
- * Entry point for Homework 7 — The Cursed Dungeon: Boss Encounter System.
- *
- * Build your heroes, boss, observers, and engine here, then run the encounter.
- */
 public class Main {
-
     public static void main(String[] args) {
-        // TODO (student): Create at least 3 heroes with different combat strategies
-        // TODO (student): Create a DungeonBoss with meaningful stats
-        // TODO (student): Instantiate and register all 5 observers
-        // TODO (student): Create a DungeonEngine and run the encounter
-        // TODO (student): Print the EncounterResult at the end
+        GameEventPublisher publisher = new GameEventPublisher();
+
+        Hero h1 = new Hero("Knight", 120, 40, 20, new AggressiveStrategy());
+        Hero h2 = new Hero("Tank", 180, 35, 40, new DefensiveStrategy());
+        Hero h3 = new Hero("Mage", 100, 50, 10, new BalancedStrategy());
+
+        List<Hero> heroes = Arrays.asList(h1, h2, h3);
+
+        DungeonBoss boss = new DungeonBoss(300, publisher);
+
+        publisher.addObserver(new BattleLogger());
+        publisher.addObserver(new AchievementTracker());
+        publisher.addObserver(new PartySupport(heroes));
+        publisher.addObserver(new HeroStatusMonitor(heroes));
+        publisher.addObserver(new LootDropper());
+
+        publisher.addObserver(boss);
+
+        DungeonEngine engine = new DungeonEngine();
+        EncounterResult result = engine.run(heroes, boss, publisher);
+
+        System.out.println("\n=== FINAL RESULT ===");
+        System.out.println("Heroes won: " + result.isHeroesWon());
+        System.out.println("Rounds played: " + result.getRoundsPlayed());
+        System.out.println("Surviving heroes: " + result.getSurvivingHeroes());
     }
 }
