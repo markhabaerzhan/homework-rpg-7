@@ -50,6 +50,14 @@ java -cp out com.narxoz.rpg.Main
 See `QUICKSTART.md` for IDE setup and detailed instructions.
 
 ---
+### Strategy
+![Strategy](diagrams/Strategy.png)
+
+### Observer
+![Observer](diagrams/Observer.png)
+
+### Ссылка на код
+https://github.com/markhabaerzhan/homework-rpg-7.git
 
 ## Read Next
 
